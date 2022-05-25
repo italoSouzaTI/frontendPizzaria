@@ -16,6 +16,11 @@ export default function Home () {
 
   async function handleLogin (event: FormEvent) {
     event.preventDefault();
+    if(!email || !password){
+      alert('Preencha os dados!')
+      return
+    }
+    setLoading(true)
     let data = {
       email,
       password
@@ -24,6 +29,8 @@ export default function Home () {
       const resposne = await signIn(data);
     } catch (error) {
       console.log(error)
+    }finally{
+      setLoading(false)
     }
 
   }
@@ -53,7 +60,7 @@ export default function Home () {
             />
             <Button
               type="submit"
-              loading={false}
+              loading={loading}
             >
               Acessar
             </Button>
