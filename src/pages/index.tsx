@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Image from 'next/Image';
 import Link from 'next/link'
 import { AuthContext } from '../contetxs/AuthContext'
+import {toast} from 'react-toastify'
 import styles from '../../styles/home.module.scss';
 import { canSSRGuest } from '../utils/canSSGuest'
 
@@ -17,6 +18,11 @@ export default function Home () {
 
   async function handleLogin (event: FormEvent) {
     event.preventDefault();
+    if(!email || !password){
+      toast.warning("Preencha todos os campos")
+      return
+    }
+    setLoading(true)
     let data = {
       email,
       password
@@ -25,6 +31,8 @@ export default function Home () {
       const resposne = await signIn(data);
     } catch (error) {
       console.log(error)
+    }finally{
+      setLoading(false)
     }
 
   }
@@ -54,7 +62,7 @@ export default function Home () {
             />
             <Button
               type="submit"
-              loading={false}
+              loading={loading}
             >
               Acessar
             </Button>
