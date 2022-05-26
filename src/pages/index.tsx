@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Image from 'next/Image';
 import Link from 'next/link'
 import { AuthContext } from '../contetxs/AuthContext'
+import {toast} from 'react-toastify'
 import styles from '../../styles/home.module.scss';
 
 import { Input } from '../components/ui/Input'
@@ -17,7 +18,7 @@ export default function Home () {
   async function handleLogin (event: FormEvent) {
     event.preventDefault();
     if(!email || !password){
-      alert('Preencha os dados!')
+      toast.warning("Preencha todos os campos")
       return
     }
     setLoading(true)
