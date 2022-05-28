@@ -1,6 +1,6 @@
-import { Children, createContext, ReactNode, useState } from 'react';
+import { Children, createContext, ReactNode, useState, useEffect } from 'react';
 import { destroyCookie, setCookie, parseCookies } from 'nookies';
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
 import Router from 'next/router'
 import { api } from '../services/apiClient';
 type AuthContextData = {
@@ -29,7 +29,7 @@ type AuthProviderProps = {
 }
 export const AuthContext = createContext({} as AuthContextData)
 
-export function signOut() {
+export function signOut () {
     try {
         destroyCookie(undefined, '@nextauth.token');
         toast.success('Deslogado com sucesso');
@@ -39,7 +39,7 @@ export function signOut() {
         console.log('Error ao deslogar');
     }
 }
-async function signUp({ name, email, password }: SignUpProps) {
+async function signUp ({ name, email, password }: SignUpProps) {
     const data = {
         name, email, password
     }
@@ -52,11 +52,29 @@ async function signUp({ name, email, password }: SignUpProps) {
         console.log('Error ao cadastrar', error)
     }
 }
-export function AuthProvider({ children }: AuthProviderProps) {
+export function AuthProvider ({ children }: AuthProviderProps) {
     const [user, setUser] = useState<UserProps>();
     const isAuthencticated = !!user;
 
-    async function signIn({ email, password }: SignProps) {
+    useEffect(() => {
+        //tantat pegar token
+        const { '@nextauth.token': token } = parseCookies();
+        if (token) {
+            api.get('/auth').then(response => {
+                const { id, name, email } = response;
+                setUser({
+                    id,
+                    name,
+                    email
+                });
+            })
+                .catch(() => {
+                    signOut()
+                })
+        }
+    }, [])
+
+    async function signIn ({ email, password }: SignProps) {
         const data = {
             email, password
         }
