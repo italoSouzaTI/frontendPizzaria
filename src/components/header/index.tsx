@@ -13,10 +13,10 @@ export function Header () {
                 </Link>
                 <nav className={styles.menuNav}>
                     <Link href="/category">
-                        <a>Category</a>
+                        <a>Categoria</a>
                     </Link>
                     <Link href="/product">
-                        <a>Category</a>
+                        <a>Cardapio</a>
                     </Link>
                     <button onClick={signOut}>
                         <FiLogOut color="#fff" size={24} />
