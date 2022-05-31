@@ -4,6 +4,7 @@ import { Header } from '../../components/header'
 import styles from './styles.module.scss'
 import { setupAPIClient } from "../../services/api";
 import { toast } from "react-toastify";
+import { canSSRAuth } from '../../utils/canSSRAuth'
 export default function category () {
     const [name, setName] = useState('');
     async function handleRegister (event: FormEvent) {
@@ -45,3 +46,9 @@ export default function category () {
         </>
     )
 }
+
+export const getServerSideProps = canSSRAuth(async (ctx) => {
+    return {
+        props: {}
+    }
+})
